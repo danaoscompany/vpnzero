@@ -1,0 +1,94 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.27.1'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "com.dn.vpnzero"
+        minSdkVersion 17
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        setProperty("archivesBaseName", "easyvpnfree-$versionName-$versionCode")
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    flavorDimensions 'VPNZero'
+    productFlavors {
+        free {
+            dimension 'VPNZero'
+            applicationId "com.dn.vpnzero"
+            resValue "string", "app_name", "VPN Zero"
+            resValue "string", "notification_title", "VPN Zero Free - %s"
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            ndk {
+//              //abiFilters "armeabi" "x86"
+//                abiFilters "armeabi-v7a", "armeabi", "arm64-v8a" // includes ARM SO files only, so no x86 SO file
+//            }
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "VPNZero.apk"
+                }
+            }
+        }
+    }
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'com.android.support:support-v4:24.2.1'
+    implementation 'com.android.support:design:24.2.1'
+    implementation 'com.android.support:recyclerview-v7:24.2.1'
+    implementation 'com.android.support:cardview-v7:24.2.1'
+
+    implementation 'com.daimajia.numberprogressbar:library:1.2@aar'
+    implementation 'com.amitshekhar.android:android-networking:0.2.0'
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'org.mapsforge:mapsforge-map-android:0.6.1'
+    implementation 'com.caverock:androidsvg:1.2.2-beta-1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testCompile 'junit:junit:4.12'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true
+    }
+    implementation 'com.google.android.gms:play-services-analytics:11.8.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.startapp:inapp-sdk:4.3.0'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.startapp:inapp-sdk:4.3.0'
+}
+
+apply plugin: 'com.google.gms.google-services'
